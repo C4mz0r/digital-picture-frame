@@ -1,5 +1,5 @@
 require 'socket'
-require 'colorize'
+#require 'colorize'
 CRLF = "\r\n"
 FRAMEFILE = "picture.html"
 SERVERROOT = File.expand_path(File.dirname(__FILE__))
@@ -16,7 +16,7 @@ def respond_to_request(request, folder="")
 		return
 	end
 		
-	puts "Found #{split_request[1]}".colorize(:blue)	
+	puts "Found #{split_request[1]}"	
 
 	if split_request[1].include? FRAMEFILE
 
@@ -26,27 +26,24 @@ def respond_to_request(request, folder="")
 		response += "Content-Type: text/html" + CRLF
 		response += CRLF
 		response += body		
-		puts "Going to return the picture.html".colorize(:red)
+		puts "Going to return the picture.html"
 		$filter = split_request[1].split('?')[1]
 		puts "Got #{$filter}"
 		return response
 
 	else
-		#filter = "c4m" #split_request[1]#.split("|")
-		#puts "Will send a filter of #{filter}".colorize(:red)
-	
-		#puts "Will try to search in #{folder}".colorize(:green)
+
 		Dir.chdir SERVERROOT
-		puts "Dir is #{Dir.pwd}".colorize(:yellow)
+		puts "Dir is #{Dir.pwd}"
 		random_file = select_random_image(folder, $filter)
-		puts "Trying to return #{random_file}".colorize(:green)
+		puts "Trying to return #{random_file}"
 		body = ""
 		body = read_file(random_file) if random_file != nil				
 		response += "HTTP/1.0 200 OK" + CRLF
 		response += "Content-Type: text/jpeg" + CRLF
 		response += CRLF
 		response += body
-		puts "Going to return the picture.html".colorize(:red)
+		puts "Going to return the picture.html"
 		return response
 	end
 
@@ -72,7 +69,7 @@ def select_random_image(folder, filter="")
 	else
 		selected_file = Dir.glob("**/*").select { |f| f.end_with?(".jpg") }.sample
 	end
-	puts "The random image is #{selected_file}".colorize(:orange)
+	puts "The random image is #{selected_file}"
 	return selected_file
 end
 
