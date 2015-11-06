@@ -5,7 +5,7 @@ How to use it:
 - Run the server.rb file (e.g. ruby server.rb)
 - Specify your computer's IP or just press enter to use localhost.  (I found that if I wanted to access this server from other machines, that I needed to be able to specify IP.)
 - Type the path to limit searches within (e.g. perhaps "C:\Users\Public" on Windows, or perhaps something like "/home" on Linux)
-- Now connect your browser to http://<server>:2000/picture.html which will start looking recursively within the path specified above
+- Now connect your browser to http://server_name:2000/picture.html which will start looking recursively within the path specified above
 - Every 10 seconds the browser will request a new image, similar to a digital picture frame
 - You can also specify a filter on the url, if they would like to narrow down the search folders
 
