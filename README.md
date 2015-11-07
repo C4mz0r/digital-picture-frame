@@ -16,3 +16,5 @@ Pointing the browser to localhost:2000/picture.html would then serve up these ph
 
 Suppose, you know you have a folder called "Animals" somewhere in the path, and you'd like to limit the search to this without reinitializing the server.  From the client (browser), you can tack on a directory substring to limit the search: e.g. localhost:2000/picture.html?Anim would only show images that were in nested directories that have the string "Anim" somewhere in them.  Keep in mind, "Anim" would match directories like "Animals", "Animation", etc.
 
+Nov-6-2015 - "Or" filtering is now added, to use it specify | within the search string on the URL.  For example:  localhost:2000/picture.html?cats|dogs would show files that have either cats or dogs somewhere within their name or path.
+
