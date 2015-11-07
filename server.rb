@@ -1,5 +1,6 @@
 require 'socket'
-require 'colorize'
+#require 'colorize'
+require 'uri'
 CRLF = "\r\n"
 FRAMEFILE = "picture.html"
 SERVERROOT = File.expand_path(File.dirname(__FILE__))
@@ -8,7 +9,6 @@ SERVERROOT = File.expand_path(File.dirname(__FILE__))
 class PictureServer
 
     private
-
 
 	def initialize(ip_address="localhost", port=2000, directory)
 		@server = TCPServer.open(ip_address, port) # listen on specified port for client to connect
@@ -42,7 +42,7 @@ class PictureServer
 			return
 		end
 		
-		puts "Found #{split_request[1]}".colorize(:blue)	
+		puts "Found #{split_request[1]}"#.colorize(:blue)	
 
 		if split_request[1].include? FRAMEFILE
 
@@ -53,7 +53,8 @@ class PictureServer
 			response += CRLF
 			response += body		
 			puts "Going to return the picture.html"
-			@filter = split_request[1].split('?')[1]
+			@filter = split_request[1].split('?')[1] #unescape makes sure we can query with spaces, etc.
+			@filter = URI.unescape(@filter) if !@filter.nil?
 			puts "Got #{@filter}"
 			return response
 
@@ -95,13 +96,15 @@ class FileSelector
 	def self.select_random_image(folder, filter="")
 		Dir.chdir folder
 		selected_file = ""
-		puts "#{@@filelist_cache.inspect}".colorize(:red)
-		puts "#{@@filtered_filelist.inspect}".colorize(:yellow)
 		
 		# cache the file list, so we don't need to keep creating it each time
-		@@filelist_cache ||= Dir.glob("**/*").select{ |f| f.end_with?(".jpg") }		
-                @@filtered_filelist = @@filelist_cache.select{ |f| f.include?(filter) } if !filter.nil?
+		@@filelist_cache ||= Dir.glob("**/*").select{ |f| f.end_with?(".jpg") }	
 		
+		# note:  since we are using regex, the | supplied in url works as 'or' when used in the regex
+		if !filter.nil?
+			@@filtered_filelist = @@filelist_cache.select{ |f| /#{filter}/.match(f) }
+		end
+
 		selected_file = (filter.nil? ? @@filelist_cache : @@filtered_filelist).sample
 
 		puts "The random image is #{selected_file}"
